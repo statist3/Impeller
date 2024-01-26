@@ -1,0 +1,20 @@
+#!/bin/sh
+cd ${0%/*} || exit 1    # Run from this directory
+
+# Source tutorial clean functions
+. $WM_PROJECT_DIR/bin/tools/CleanFunctions
+
+# remove surface
+\rm -f constant/polyMesh > /dev/null 2>&1
+
+cleanCase
+
+\rm -rf 0 > /dev/null 2>&1
+\rm -f Mesh/impellerInlet_importSalome.py
+\rm -f Mesh/Volute_importSalome.py
+\rm -rf Mesh/*/*.brep > /dev/null 2>&1
+\rm -rf Mesh/*/log.* > /dev/null 2>&1
+\rm -rf Mesh/*/*.fms > /dev/null 2>&1
+\rm -rf Mesh/*/*.stl > /dev/null 2>&1
+\rm -rf Mesh/*/constant > /dev/null 2>&1
+

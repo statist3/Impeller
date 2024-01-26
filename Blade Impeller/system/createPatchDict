@@ -1,0 +1,121 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2006                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      createPatchDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+// Do a synchronisation of coupled points after creation of any patches.
+// Note: this does not work with points that are on multiple coupled patches
+//       with transformations (i.e. cyclics).
+pointSync false;
+
+// Patches to create.
+patches
+(
+    {
+        //- Master side patch
+        name            amiImpToInlet;
+        patchInfo
+        {
+            type            cyclicAMI;
+            matchTolerance  0.0001;
+            neighbourPatch  amiInletToImp;
+            transform       noOrdering;
+        }
+        constructFrom patches;
+        patches (amiImpToInletMesh);
+    }
+
+    {
+        //- Slave side patch
+        name            amiInletToImp;
+        patchInfo
+        {
+            type            cyclicAMI;
+            matchTolerance  0.0001;
+            neighbourPatch  amiImpToInlet;
+            transform       noOrdering;
+        }
+        constructFrom patches;
+        patches (amiInletToImpMesh);
+    }
+    
+    {
+        //- Master side patch
+        name            amiImpToVolute;
+        patchInfo
+        {
+            type            cyclicAMI;
+            matchTolerance  0.0001;
+            neighbourPatch  amiVoluteToImp;
+            transform       noOrdering;
+        }
+        constructFrom patches;
+        patches (amiImpToVoluteMesh);
+    }
+
+    {
+        //- Slave side patch
+        name            amiVoluteToImp;
+        patchInfo
+        {
+            type            cyclicAMI;
+            matchTolerance  0.0001;
+            neighbourPatch  amiImpToVolute;
+            transform       noOrdering;
+        }
+        constructFrom patches;
+        patches (amiVoluteToImpMesh);
+    }
+
+
+    {
+        name inlet;
+        patchInfo
+        {
+            type            patch;
+        }
+        constructFrom patches;
+        patches (inletMesh);
+    }
+    {
+        name outlet;
+        patchInfo
+        {
+            type            patch;
+        }
+        constructFrom patches;
+        patches (outletMesh);
+    }
+    {
+        name walls;
+        patchInfo
+        {
+            type            wall;
+        }
+        constructFrom patches;
+        patches ("wall.*");
+    }
+    {
+        name rotatingWall;
+        patchInfo
+        {
+            type            wall;
+        }
+        constructFrom patches;
+        patches ("rotating.*");
+    }
+    
+);
+
+// ************************************************************************* //

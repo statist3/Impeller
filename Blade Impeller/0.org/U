@@ -1,0 +1,81 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2006                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volVectorField;
+    object      U;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 1 -1 0 0 0 0];
+
+internalField   uniform (0 0 0);
+
+boundaryField
+{
+    inlet
+    {
+        type            flowRateInletVelocity;
+	    volumetricFlowRate table
+        (
+            ( 0	      0.0002 ) 
+            ( 200     0.0002 )
+            ( 201     0.001 )
+            ( 400     0.001 )
+            ( 401     0.0018 )
+            ( 600     0.0018 )
+            ( 601     0.0026 )
+            ( 800     0.0026 )
+            ( 801     0.0034  ) 
+            ( 1000    0.0034  ) 
+            ( 1001    0.004 )
+            ( 1200    0.004 )
+            ( 1201    0.0048 )
+            ( 1400    0.0048 )
+            ( 1401    0.0056 )
+            ( 1600    0.0056 )
+            ( 1601    0.0064 )
+            ( 1800    0.0064 )
+            ( 1801    0.0072 )
+            /*( 2000    0.0020 )
+            ( 2201    0.0022 )
+            ( 2400    0.0022 )
+            ( 2401    0.0024 )
+            ( 2600    0.0024 )
+            ( 2801    0.0026 )*/
+        );
+        value           uniform (0 0 -1);
+    }
+
+    outlet
+    {
+        type            pressureInletOutletVelocity;
+        value           uniform (1 0 0);
+    }
+
+    walls
+    {
+	    type            noSlip;
+    }
+    
+    rotatingWall
+    {
+	    type            noSlip;
+    }
+
+    "ami.*"
+    {
+        type            cyclicAMI;
+    }
+
+    #includeEtc "caseDicts/setConstraintTypes"
+}
+
+// ************************************************************************* //

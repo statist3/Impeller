@@ -1,0 +1,102 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2006                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version   2.0;
+    format    ascii;
+    class     dictionary;
+    location  "system";
+    object    meshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+surfaceFile "joined2.fms";
+
+maxCellSize 4.0;
+
+boundaryCellSize 2.0;
+
+keepCellsIntersectingBoundary  0;
+
+checkForGluedMesh   0;
+
+//minCellSize 5.00;
+
+localRefinement
+{ 
+    "wall.*"
+    {
+        additionalRefinementLevels 2;
+    }
+        
+    "ami.*"
+    {
+        additionalRefinementLevels 2;
+    }
+    
+    "rotating.*"
+    {
+        additionalRefinementLevels 2;
+    }
+    
+}
+
+objectRefinements
+{
+
+}
+
+keepCellsIntersectingPatches
+{
+}
+
+boundaryLayers
+{
+    
+//     optimiseLayer 1;
+
+//       untangleLayers 0;
+  
+    patchBoundaryLayers
+    {
+        "wall.*"
+        {
+            nLayers  2;
+            
+            thicknessRatio 1.1;
+            
+    //         maxFirstLayerThickness 2;
+
+    //         allowDiscontinuity  0;
+          
+        }
+        "rotating.*"
+        {
+            nLayers  2;
+            
+            thicknessRatio 1.1;
+            
+    //         maxFirstLayerThickness 2;
+
+    //         allowDiscontinuity  0;
+          
+        }
+    }
+}
+
+anisotropicSources
+{
+
+}
+
+renameBoundary
+{
+}
+               
+     
+// ************************************************************************* //

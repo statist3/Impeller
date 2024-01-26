@@ -1,0 +1,64 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2006                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      controlDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+application     simpleFoam;
+
+startFrom       startTime;
+
+startTime       0;
+
+stopAt          endTime;
+
+endTime         2000;
+
+deltaT          1;
+
+writeControl    timeStep;
+
+writeInterval   200;
+
+purgeWrite      0;
+
+writeFormat     ascii;
+
+writePrecision   8;
+
+writeCompression off;
+
+timeFormat      general;
+
+timePrecision   6;
+
+runTimeModifiable true;
+
+functions
+{
+    #include "forces"
+    pressureDifferencePatch
+    {
+        patch1      inlet;
+        patch2      outlet;
+
+        #includeEtc "caseDicts/postProcessing/pressure/pressureDifferencePatch.cfg"
+    }
+    flowRatePatch
+    {
+        name        outlet;
+        #includeEtc "caseDicts/postProcessing/flowRate/flowRatePatch.cfg"
+    } 
+}
+
+// ************************************************************************* //

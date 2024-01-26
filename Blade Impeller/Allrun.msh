@@ -1,0 +1,60 @@
+#!/bin/sh
+#SOURCE cfmesh for this script
+
+# Source tutorial run functions
+. $WM_PROJECT_DIR/bin/tools/RunFunctions
+
+# ---- CAD GENERATION ---- #
+
+cd Mesh
+
+python SalomeImpellerAndInlet.py
+python SalomeVolute.py
+
+salome start -t --shutdown-servers=1 impellerInlet_importSalome.py
+
+salome start -t --shutdown-servers=1 Volute_importSalome.py
+
+# ---- IMPELLER MESH GENERATION ---- #
+
+cd Impeller
+
+sh renameStl.sh
+
+runApplication surfaceToFMS joined.stl
+
+rm joined.stl
+
+runApplication surfaceFeatureEdges -angle 80 joined.fms joined2.fms
+
+runApplication cartesianMesh
+
+# ---- INLET MESH GENERATION ---- #
+
+cd ../Inlet
+
+sh renameStl.sh
+
+runApplication surfaceToFMS joined.stl
+
+rm joined.stl
+
+runApplication surfaceFeatureEdges -angle 80 joined.fms joined2.fms
+
+runApplication cartesianMesh
+
+# ---- VOLUTE MESH GENERATION ---- #
+
+cd ../Volute
+
+sh renameStl.sh
+
+runApplication surfaceToFMS joined.stl
+
+rm joined.stl
+
+runApplication surfaceFeatureEdges -angle 80 joined.fms joined2.fms
+
+runApplication cartesianMesh
+
+
